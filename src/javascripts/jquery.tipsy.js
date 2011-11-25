@@ -24,7 +24,14 @@
                 
                 $tip.find('.tipsy-inner')[this.options.html ? 'html' : 'text'](title);
                 $tip[0].className = 'tipsy'; // reset classname in case of dynamic gravity
-                $tip.remove().css({top: 0, left: 0, visibility: 'hidden', display: 'block'}).prependTo(document.body);
+                
+                if( this.options.target ) {
+                  var tiptarget = $(this.options.target);
+                  $tip.remove().css({top: 0, left: 0, visibility: 'hidden', display: 'block'}).prependTo(tiptarget);
+                }
+                else {
+                  $tip.remove().css({top: 0, left: 0, visibility: 'hidden', display: 'block'}).prependTo(document.body);
+                }
                 
                 var pos = $.extend({}, this.$element.offset(), {
                     width: this.$element[0].offsetWidth,
@@ -49,6 +56,11 @@
                     case 'w':
                         tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width + this.options.offset};
                         break;
+                }
+                
+                if( this.options.target ) {
+                  tp.top = tp.top - tiptarget.offset().top;
+                  tp.left = tp.left - tiptarget.offset().left;
                 }
                 
                 if (gravity.length == 2) {
